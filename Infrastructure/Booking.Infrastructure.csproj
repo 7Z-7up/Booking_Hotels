@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Dbcontext\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
 
   <ItemGroup>
