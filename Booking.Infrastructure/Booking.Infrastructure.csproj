@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Booking.Core\Booking.Core.csproj" />
-    <ProjectReference Include="..\ClassLibrary\Booking.Core.csproj" />
   </ItemGroup>
 
 </Project>
