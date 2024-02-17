@@ -1,4 +1,5 @@
 ﻿using Booking.Core.Domain.Entities;
+using Booking.Core.Helpers.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Booking.Core.Domain.RepositoryContracts
         Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, int skip, int take);
 
         Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, int? skip, int? take,
-            Expression<Func<T, object>> orderBy = null, string orderByDirection = OrderBy.Ascending);
+            Expression<Func<T, object>> orderBy = null, OrderBy order=OrderBy.Ascending);
 
         Task<T> Add(T entity);
 

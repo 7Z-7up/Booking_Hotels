@@ -1,5 +1,6 @@
 ﻿using Booking.Core.Domain.Entities;
 using Booking.Core.Domain.RepositoryContracts;
+using Booking.Core.Helpers.Enums;
 using Booking.Infrastructure.Dbcontext;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -58,7 +59,7 @@ namespace Booking.Infrastructure.Repository
         }
 
         public async Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, int? take, int? skip,
-            Expression<Func<T, object>> orderBy = null, string orderByDirection = OrderBy.Ascending)
+            Expression<Func<T, object>> orderBy = null, OrderBy order=OrderBy.Ascending)
         {
             IQueryable<T> query = _context.Set<T>().Where(criteria);
 
@@ -70,7 +71,7 @@ namespace Booking.Infrastructure.Repository
 
             if (orderBy != null)
             {
-                if (orderByDirection == OrderBy.Ascending)
+                if (order==OrderBy.Ascending)
                     query = query.OrderBy(orderBy);
                 else
                     query = query.OrderByDescending(orderBy);
