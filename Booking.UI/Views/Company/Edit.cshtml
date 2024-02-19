@@ -1,0 +1,25 @@
+﻿@model Booking.Core.DTO.CompanyDTO
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Company</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <partial name="_EditPartial" model="Model" />
+            <img class="card-img-top mt-2" src="~/images/company/@Model.Image" alt="Card image cap">
+            <div class="form-group">
+                <input type="submit" value="Edit" class="btn my-2 btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
