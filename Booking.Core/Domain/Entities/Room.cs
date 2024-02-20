@@ -28,7 +28,7 @@ namespace Core.Domain.Entities
         [Required]
         public RoomType Type { get; set; }
 
-        public ICollection<string>? Images { get; set; }
+        public List<string>? Images { get; set; }
 
         [Required]
         [ForeignKey("Hotel")]

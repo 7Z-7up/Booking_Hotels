@@ -3,6 +3,7 @@ using Booking.Core.Domain.RepositoryContracts;
 using Booking.Core.Helpers.Enums;
 using Booking.Infrastructure.Dbcontext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Booking.Infrastructure.Repository
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<T> Find(Expression<Func<T, bool>> criteria, string[] includes = null)
+        public async Task<T> Find(Expression<Func<T, bool>> criteria, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _context.Set<T>();
 
@@ -42,7 +43,7 @@ namespace Booking.Infrastructure.Repository
             return await query.SingleOrDefaultAsync(criteria);
         }
 
-        public async Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null)
+        public async Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _context.Set<T>();
 
