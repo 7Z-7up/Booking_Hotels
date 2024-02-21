@@ -14,12 +14,12 @@ namespace Booking.Core.Services
     public class CustomerService : ICustomerService
     {
         public IUnitOfWork UnitOfWork { get; }
-        //public ILogger Logger { get; }
+        public ILogger Logger { get; }
 
-        public CustomerService(IUnitOfWork unitOfWork/*,ILogger logger*/) 
+        public CustomerService(IUnitOfWork unitOfWork, ILogger logger) 
         {
             UnitOfWork = unitOfWork;
-            //Logger = logger;
+            Logger = logger;
         }
 
         public async Task CreateAsync(CustomerDTO customerDTO)
@@ -31,7 +31,7 @@ namespace Booking.Core.Services
             }
             catch (Exception ex)
             {
-                //Logger.LogError(ex,ex.Message);
+                Logger.LogError(ex, ex.Message);
             }
         }
 
