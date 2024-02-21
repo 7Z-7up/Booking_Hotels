@@ -10,18 +10,18 @@ namespace Booking.UI.Controllers
     [Route("[controller]")]
     public class AccountController : Controller
     {
-        public ICustomerService CustomerService { get; }
-        public UserManager<AppUser> UserManager { get; }
-        public RoleManager<AppRole> RoleManager { get; }
-        public SignInManager<AppUser> SignInManager { get; }
+        private readonly ICustomerService _customerService;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
         public AccountController(ICustomerService customerService,UserManager<AppUser> userManager,
             RoleManager<AppRole> roleManager,SignInManager<AppUser> signInManager)
         {
-            CustomerService = customerService;
-            UserManager = userManager;
-            RoleManager = roleManager;
-            SignInManager = signInManager;
+            _customerService = customerService;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _signInManager = signInManager;
         }
         [HttpGet]
         [Route("Register")]
@@ -38,17 +38,17 @@ namespace Booking.UI.Controllers
                  
                 customerDTO.ID = Guid.NewGuid();
                 var appUser = new AppUser() { Id = customerDTO.ID, UserName = customerDTO.Email, Email = customerDTO.Email, PasswordHash = customerDTO.Password, PhoneNumber = customerDTO.PhoneNumber };
-                var result = await UserManager.CreateAsync(appUser, customerDTO.Password);
+                var result = await _userManager.CreateAsync(appUser, customerDTO.Password);
                 if (result.Succeeded)
                 {
-                    await CustomerService.CreateAsync(customerDTO);
-                    await SignInManager.PasswordSignInAsync(appUser, customerDTO.Password, false, false);
-                    if (await RoleManager.FindByNameAsync(UserType.Customer.ToString()) is null)
+                    await _customerService.CreateAsync(customerDTO);
+                    await _signInManager.PasswordSignInAsync(appUser, customerDTO.Password, false, false);
+                    if (await _roleManager.FindByNameAsync(UserType.Customer.ToString()) is null)
                     {
                         AppRole role = new AppRole() { Name = UserType.Customer.ToString() };
-                        await RoleManager.CreateAsync(role);
+                        await _roleManager.CreateAsync(role);
                     }
-                    await UserManager.AddToRoleAsync(appUser, UserType.Customer.ToString());
+                    await _userManager.AddToRoleAsync(appUser, UserType.Customer.ToString());
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -75,14 +75,14 @@ namespace Booking.UI.Controllers
         {
             if(ModelState.IsValid)
             {
-                var user = await UserManager.FindByEmailAsync(logInDTO.Email);
+                var user = await _userManager.FindByEmailAsync(logInDTO.Email);
                 if (user != null)
                 {
-                    var result = await SignInManager.PasswordSignInAsync(user, logInDTO.Password, logInDTO.RememberMe, false);
+                    var result = await _signInManager.PasswordSignInAsync(user, logInDTO.Password, logInDTO.RememberMe, false);
 
                     if (result.Succeeded)
                     {
-                        if (await UserManager.IsInRoleAsync(user, UserType.Company.ToString()))
+                        if (await _userManager.IsInRoleAsync(user, UserType.Company.ToString()))
                         {
                             return RedirectToAction("Index", "Home", new { area = "Company" });
                         }
@@ -97,9 +97,10 @@ namespace Booking.UI.Controllers
             }
             return View(logInDTO);
         }
+        [Route("LogOut")]
         public async Task<IActionResult> LogOut()
         {
-            await SignInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
