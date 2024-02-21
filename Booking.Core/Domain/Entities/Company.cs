@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Booking.Core.Domain.IdentityEntities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Domain.Entities
@@ -8,6 +9,7 @@ namespace Core.Domain.Entities
     {
        
         [Key]
+        [ForeignKey(nameof(AppUser))]
         public Guid ID { get; set; }
         [Required]
         [MaxLength(100)]
@@ -19,6 +21,7 @@ namespace Core.Domain.Entities
 
         public bool IsDeleted { get; set; } = false;
         public virtual ICollection<Hotel>? Hotels { get; set; }
+        public virtual AppUser? AppUser { get; set; }
     }
 
 
