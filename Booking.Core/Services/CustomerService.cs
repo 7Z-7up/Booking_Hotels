@@ -13,13 +13,13 @@ namespace Booking.Core.Services
 {
     public class CustomerService : ICustomerService
     {
-        public IUnitOfWork UnitOfWork { get; }
-        public ILogger Logger { get; }
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<CustomerService> _logger;
 
-        public CustomerService(IUnitOfWork unitOfWork, ILogger logger) 
+        public CustomerService(IUnitOfWork unitOfWork, ILogger<CustomerService> logger) 
         {
-            UnitOfWork = unitOfWork;
-            Logger = logger;
+            _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task CreateAsync(CustomerDTO customerDTO)
@@ -27,11 +27,11 @@ namespace Booking.Core.Services
             Customer customer = CustomerDTO.ToCustomer(customerDTO);
             try
             {
-                await UnitOfWork.Customers.Add(customer);
+                await _unitOfWork.Customers.Add(customer);
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
             }
         }
 
