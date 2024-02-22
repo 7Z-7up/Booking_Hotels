@@ -27,7 +27,7 @@ builder.Host.ConfigureLogging(logging =>
     logging.AddConsole();
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<ICustomerService,CustomerService>();
+//builder.Services.AddScoped<ICustomerService,CustomerService>();
 
 var app = builder.Build();
 
