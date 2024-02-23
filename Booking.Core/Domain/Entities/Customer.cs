@@ -1,5 +1,6 @@
 ﻿using Booking.Core.Domain.Entities;
 using Booking.Core.Domain.IdentityEntities;
+using Booking.Core.DTO;
 using Booking.Core.Helpers.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -36,4 +37,5 @@ namespace Core.Domain.Entities
         public virtual AppUser? AppUser { get; set; }
 
     }
+
 }

@@ -18,7 +18,6 @@ namespace Core.Domain.Entities
         public string? Image {  get; set; }
         [DataType(DataType.Currency)]
         public decimal? TotalProfits { get; set; }
-
         public bool IsDeleted { get; set; } = false;
         public virtual ICollection<Hotel>? Hotels { get; set; }
         public virtual AppUser? AppUser { get; set; }

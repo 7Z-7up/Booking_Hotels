@@ -1,5 +1,7 @@
-﻿using Booking.Core.Domain.RepositoryContracts;
+
 using Booking.Core.DTO;
+using Booking.Core.ServicesContract;
+
 using Core.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,124 +9,87 @@ namespace Booking.UI.Controllers
 {
     public class CompanyController : Controller
     {
-        public CompanyController(IUnitOfWork unitOfWork, IWebHostEnvironment hostEnvironment)
+        private readonly ICompanyService _companyService;
+
+        public CompanyController(ICompanyService companyService)
         {
-            UnitOfWork = unitOfWork;
-            this.HostEnvironment = hostEnvironment;
+            _companyService = companyService;
         }
 
-        public IUnitOfWork UnitOfWork { get; }
-        public IWebHostEnvironment HostEnvironment { get; }
 
         public async Task<IActionResult> Index()
         {
-            var company = await UnitOfWork.Companies.GetAll();
+            var company = await _companyService.GetAll();
             return View(company);
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-        
-        [HttpPost]
-        public async Task<IActionResult> Create(CompanyDTO companyDTO)
-        {
-            if (ModelState.IsValid)
-            {
-                Company company = new()
-                {
-                    ID = Guid.NewGuid(),
-                    Name = companyDTO.Name,
-                    TotalProfits = 0,
-                    IsDeleted = false,
-                };
-                if (companyDTO.ImageFile != null)
-                {
-                    if (companyDTO.ImageFile.ContentType.StartsWith("image/"))
-                        company.Image = await UploadFileAsync(companyDTO.ImageFile);
-                    else
-                    {
-                        ModelState.AddModelError("ImageFile", "Wrong File Format!");
-                        return View(companyDTO);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("ImageFile", "Image is Required!!");
-                    return View(companyDTO);
-                }
 
-                UnitOfWork.Companies.Add(company);
-                UnitOfWork.Complete();
-                return RedirectToAction("Index");
-            }
+        //[HttpGet]
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
 
-            return View(companyDTO);
-        }
-        [HttpGet]
-        public async Task<IActionResult> Edit(string id)
-        {
-            var company = await UnitOfWork.Companies.GetById(Guid.Parse(id));
-            CompanyDTO companyDTO = new CompanyDTO(company);
+        //[HttpPost]
+        //public async Task<IActionResult> Create(CompanyDTO companyDTO)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (companyDTO.ImageFile != null)
+        //        {
+        //            if (!companyDTO.ImageFile.ContentType.StartsWith("image/"))
+        //            {
+        //                ModelState.AddModelError("ImageFile", "Wrong File Format!");
+        //                return View(companyDTO);
+        //            }
+        //        }
+                
+        //        return RedirectToAction("Index");
+        //    }
 
-            return View(companyDTO);
-        }
+        //    return View(companyDTO);
+        //}
+        //[HttpGet]
+        //public async Task<IActionResult> Edit(string id)
+        //{
+        //    //var company = await UnitOfWork.Companies.GetById(Guid.Parse(id));
+        //    //CompanyDTO companyDTO = new CompanyDTO(company);
 
-        public async Task<IActionResult> Edit(CompanyDTO companyDTO)
-        {
-            if (ModelState.IsValid)
-            {
+        //    return View();//companyDTO);
+        //}
 
-            var company = await UnitOfWork.Companies.GetById(companyDTO.ID);
+        //public async Task<IActionResult> Edit(CompanyDTO companyDTO)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (companyDTO.ImageFile != null)
+        //        {
+                   
+        //            if (!companyDTO.ImageFile.ContentType.StartsWith("image/"))
+        //            {
+        //                ModelState.AddModelError("ImageFile", "Wrong File Format!");
+        //                return View(companyDTO);
+        //            }
+        //        }
+        //        return RedirectToAction("Index");
+        //    }
 
-                company.Name = companyDTO.Name;
-                if (companyDTO.ImageFile != null)
-                {
-                    if (companyDTO.ImageFile.ContentType.StartsWith("image/"))
-                    {
-                        if (company.Image != null)
-                        {
-                            string ExitingFile = Path.Combine(HostEnvironment.WebRootPath, "images","company" , company.Image);
-                            System.IO.File.Delete(ExitingFile);
-                        }
-                        company.Image = await UploadFileAsync(companyDTO.ImageFile);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("ImageFile", "Wrong File Format!");
-                        return View(companyDTO);
-                    }
-                }
-                UnitOfWork.Companies.Update(company);
-                UnitOfWork.Complete();
-                return RedirectToAction("Index");
-            }
+        //    return View(companyDTO);
+        //}
 
-            return View(companyDTO);
-        }
+        //[HttpGet]
+        //public async Task<IActionResult> Delete(Guid id)
+        //{
+        //    await _companyService.DeleteAsync(id);
+        //    return RedirectToAction("Index");
+        //}
+
 
         [HttpGet]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            var company = await UnitOfWork.Companies.GetById(Guid.Parse(id));
-            if(company != null)
-            {
-                company.IsDeleted = true;
-
-                UnitOfWork.Companies.Update(company);
-                UnitOfWork.Complete();
-            }
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Details(string id)
-        {
-            var company = await UnitOfWork.Companies.GetById(Guid.Parse(id));
-            if(company != null)
+            var company = _companyService.GetCompanyById(id);
+            if (company != null)
             {
                 return View(company);
             }
@@ -132,15 +97,5 @@ namespace Booking.UI.Controllers
             return RedirectToAction("Index");
         }
 
-        private async Task<string> UploadFileAsync(IFormFile formFile)
-        {
-            string UniqueFileName = Guid.NewGuid().ToString() + "-" + formFile.FileName;
-            string TargetPath = Path.Combine(HostEnvironment.WebRootPath, "images","company" , UniqueFileName);
-            using (var stream = new FileStream(TargetPath, FileMode.Create))
-            {
-                await formFile.CopyToAsync(stream);
-            }
-            return UniqueFileName;
-        }
     }
 }
