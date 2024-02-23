@@ -35,6 +35,8 @@
     <Folder Include="Areas\Company\Data\" />
     <Folder Include="Areas\Company\Models\" />
     <Folder Include="Areas\Company\Views\" />
+    <Folder Include="Areas\Orders\Data\" />
+    <Folder Include="Areas\Orders\Models\" />
   </ItemGroup>
 
 </Project>

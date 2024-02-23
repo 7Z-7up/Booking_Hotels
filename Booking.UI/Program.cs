@@ -31,6 +31,7 @@ builder.Host.ConfigureLogging(logging =>
     logging.AddDebug();
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IOrderForAdminService, OrderForAdminService>();
 
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
@@ -66,6 +67,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
+app.MapControllerRoute(
+    name: "Orders",
+    pattern: "{area= Orders}/{controller=Orders}/{action=Index}/{id?}"
+);
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
