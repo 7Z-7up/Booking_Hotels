@@ -10,21 +10,26 @@ using System.Threading.Tasks;
 
 namespace Booking.Core.DTO
 {
-    public class CompanyDTO : Company
+    public class CompanyDTO 
     {
+        [Required(ErrorMessage ="You Must Provide ID")]
+        public Guid Id { get; set; }
+        [Required(ErrorMessage ="You Must Provide Name")]
+        public string Name { get; set; }
         [DisplayName("Upload Image")]
         public IFormFile? ImageFile { get; set; }
-
-        public CompanyDTO()
+        public decimal? TotalProfits { get; set; }
+        public static Company ToCompany(CompanyDTO companyDto)
         {
-            
+            return new Company()
+            {
+                ID = companyDto.Id,
+                Image= "",
+                Name = companyDto.Name,
+                TotalProfits = companyDto.TotalProfits,
+            };
         }
 
-        public CompanyDTO(Company company)
-        {
-            Name = company.Name;
-            ID = company.ID;
-            Image = company.Image;
-        }
+
     }
 }

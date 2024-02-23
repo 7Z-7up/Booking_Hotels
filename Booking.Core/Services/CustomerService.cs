@@ -35,24 +35,60 @@ namespace Booking.Core.Services
             }
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Customer customer =await _unitOfWork.Customers.Find(c=>c.ID==id);
+                customer.IsDeleted = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
         }
 
-        public Task<IEnumerable<CustomerDTO>> GetAll()
+        public async Task<IEnumerable<CustomerDTO>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var customers =await _unitOfWork.Customers.GetAll();
+                var customerDtos = customers.Select(c => c.ToCustomerDTO());
+                return customerDtos;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return Enumerable.Empty<CustomerDTO>();
+            }
         }
 
-        public Task<CustomerDTO> GetCustomerById(Guid id)
+        public async Task<CustomerDTO> GetCustomerById(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var customer = await _unitOfWork.Customers.GetById(id);
+                var customerDto = customer.ToCustomerDTO();
+                return customerDto;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return new CustomerDTO();
+            }
         }
 
-        public Task UpdateAsync(CustomerDTO customer)
+        public async Task UpdateAsync(CustomerDTO customerDto)
         {
-            throw new NotImplementedException();
+            var customer = CustomerDTO.ToCustomer(customerDto);
+            try
+            {
+                _unitOfWork.Customers.Update(customer);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
         }
     }
 }
