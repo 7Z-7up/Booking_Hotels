@@ -38,6 +38,19 @@ namespace Booking.Core.DTO
         [DisplayName("Upload Image")]
         public IFormFile? ImageFile { get; set; }
         public decimal? TotalProfits { get; set; }
+        [DataType(DataType.Password)]
+        [PasswordPropertyText]
+        public string Password { get; set; }
+        [DataType(DataType.Password)]
+        [PasswordPropertyText]
+        [Compare(nameof(Password), ErrorMessage = "Password and Confirm Password Are Different")]
+        public string ConfirmPassword { get; set; }
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
+        [MaxLength(100)]
+        [Required(ErrorMessage = "You Must Enter an Email Address")]
+        public string Email { get; set; }
+
         public static Company ToCompany(CompanyDTO companyDto)
         {
             return new Company()

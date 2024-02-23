@@ -32,6 +32,11 @@ builder.Host.ConfigureLogging(logging =>
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<UploadImageService>();
+
+
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddSingleton<IStartupFilter>(new StartupFilterHelperService(InitializeHelperService));
 builder.Services.AddSession(options =>
@@ -41,7 +46,6 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddScoped<ICustomerService,CustomerService>();
 
 
 var app = builder.Build();

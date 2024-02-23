@@ -11,14 +11,16 @@ namespace Booking.UI.Controllers
     public class AccountController : Controller
     {
         private readonly ICustomerService _customerService;
+        private readonly ICompanyService _companyService;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(ICustomerService customerService,UserManager<AppUser> userManager,
+        public AccountController(ICustomerService customerService,ICompanyService companyService,UserManager<AppUser> userManager,
             RoleManager<AppRole> roleManager,SignInManager<AppUser> signInManager)
         {
             _customerService = customerService;
+            _companyService = companyService;
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
@@ -65,6 +67,56 @@ namespace Booking.UI.Controllers
                 return View(customerDTO);
             }
         }
+        [HttpGet("RegisterCompany")]
+        public IActionResult RegisterCompany()
+        {
+            return View(new CompanyDTO());
+        }
+
+        [HttpPost("RegisterCompany")]
+        public async Task<IActionResult> RegisterCompany(CompanyDTO companyDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                if (companyDTO.ImageFile != null)
+                {
+                    if (!companyDTO.ImageFile.ContentType.StartsWith("image/"))
+                    {
+                        ModelState.AddModelError("ImageFile", "Wrong File Format!");
+                        return View(companyDTO);
+                    }
+                }
+                companyDTO.Id = Guid.NewGuid();
+                var appUser = new AppUser() { Id = companyDTO.Id, UserName = companyDTO.Email, Email = companyDTO.Email, PasswordHash = companyDTO.Password };
+                var result = await _userManager.CreateAsync(appUser, companyDTO.Password);
+                if (result.Succeeded)
+                {
+                    await _companyService.CreateAsync(companyDTO);
+                    await _signInManager.PasswordSignInAsync(appUser, companyDTO.Password, false, false);
+                    if (await _roleManager.FindByNameAsync(UserType.Company.ToString()) is null)
+                    {
+                        AppRole role = new AppRole() { Name = UserType.Company.ToString() };
+                        await _roleManager.CreateAsync(role);
+                    }
+                    await _userManager.AddToRoleAsync(appUser, UserType.Company.ToString());
+                    return RedirectToAction("Index", "Home",new {Area="Company"});
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("Register", error.Description);
+                    }
+                    return View(companyDTO);
+                }
+            }
+            else
+            {
+                return View(companyDTO);
+            }
+
+        }
+
         [HttpGet("Login")]
         public async Task<IActionResult> LogIn()
         {

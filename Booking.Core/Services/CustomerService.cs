@@ -1,13 +1,9 @@
 ﻿using Booking.Core.Domain.RepositoryContracts;
 using Booking.Core.DTO;
+using Booking.Core.Helpers.EntitesExtensions;
 using Booking.Core.ServicesContract;
 using Core.Domain.Entities;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Booking.Core.Services
 {
@@ -28,6 +24,7 @@ namespace Booking.Core.Services
             try
             {
                 await _unitOfWork.Customers.Add(customer);
+                _unitOfWork.Complete();
             }
             catch (Exception ex)
             {
@@ -40,7 +37,11 @@ namespace Booking.Core.Services
             try
             {
                 Customer customer =await _unitOfWork.Customers.Find(c=>c.ID==id);
-                customer.IsDeleted = true;
+                if (customer!=null)
+                {
+                    customer.IsDeleted = true;
+                    _unitOfWork.Complete();
+                }
             }
             catch (Exception ex)
             {
