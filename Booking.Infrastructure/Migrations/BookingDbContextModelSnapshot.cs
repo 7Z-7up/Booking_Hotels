@@ -47,6 +47,19 @@ namespace Booking.Infrastructure.Migrations
                     b.ToTable("Tb_Order");
                 });
 
+            modelBuilder.Entity("Booking.Core.Domain.Entities.RoomImages", b =>
+                {
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("RoomId", "Image");
+
+                    b.ToTable("RoomImages");
+                });
+
             modelBuilder.Entity("Booking.Core.Domain.Entities.RoomOrder", b =>
                 {
                     b.Property<Guid>("OrderID")
@@ -183,9 +196,6 @@ namespace Booking.Infrastructure.Migrations
                     b.Property<Guid>("HotelId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Images")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -217,6 +227,17 @@ namespace Booking.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Booking.Core.Domain.Entities.RoomImages", b =>
+                {
+                    b.HasOne("Core.Domain.Entities.Room", "Room")
+                        .WithMany("Images")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("Booking.Core.Domain.Entities.RoomOrder", b =>
@@ -273,6 +294,11 @@ namespace Booking.Infrastructure.Migrations
             modelBuilder.Entity("Core.Domain.Entities.Hotel", b =>
                 {
                     b.Navigation("Rooms");
+                });
+
+            modelBuilder.Entity("Core.Domain.Entities.Room", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

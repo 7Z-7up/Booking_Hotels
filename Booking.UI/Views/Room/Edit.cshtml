@@ -1,0 +1,57 @@
+﻿@model Booking.Core.DTO.RoomDTO
+@using Booking.Core.Helpers.Enums
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit Room</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input type="hidden" asp-for="ID" />
+
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Taken"></label>
+        <input asp-for="Taken" class="form-check-input" />
+        <span asp-validation-for="Taken" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Type"></label>
+        <select asp-for="Type" asp-items="@Html.GetEnumSelectList<RoomType>()" class="form-control"></select>
+        <span asp-validation-for="Type" class="text-danger"></span>
+    </div>
+@* 
+
+    <div class="form-group">
+        <label asp-for="ImageFiles" class="control-label"></label>
+        <input asp-for="ImageFiles" type="file" multiple class="form-control" />
+        <span asp-validation-for="ImageFiles" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="existingImages">Existing Images:</label>
+        @foreach (var imagePath in Model.Images)
+        {
+            <div>
+                <h1>@imagePath</h1>
+                <img src= src="~/images/room/@imagePath" alt="Existing Image" class="existing-image" />
+            </div>
+        }
+    </div> *@
+
+    <div class="form-group">
+        <label asp-for="RoomNum"></label>
+        <input asp-for="RoomNum" class="form-control" />
+        <span asp-validation-for="RoomNum" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

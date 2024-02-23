@@ -12,13 +12,17 @@ namespace Booking.UI.Controllers
         {
             _logger = logger;
         }
-
+        [Route("/Home")]
         public IActionResult Index()
         {
             return View();
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+        public IActionResult ContactUs()
         {
             return View();
         }
