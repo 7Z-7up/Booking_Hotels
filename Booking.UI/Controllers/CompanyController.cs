@@ -1,5 +1,7 @@
-﻿using Booking.Core.DTO;
+
+using Booking.Core.DTO;
 using Booking.Core.ServicesContract;
+
 using Core.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +22,7 @@ namespace Booking.UI.Controllers
             var company = await _companyService.GetAll();
             return View(company);
         }
+
 
         //[HttpGet]
         //public IActionResult Create()
@@ -80,6 +83,7 @@ namespace Booking.UI.Controllers
         //    await _companyService.DeleteAsync(id);
         //    return RedirectToAction("Index");
         //}
+
 
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)

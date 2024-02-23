@@ -1,5 +1,6 @@
 using Booking.Core.Domain.IdentityEntities;
 using Booking.Core.Domain.RepositoryContracts;
+using Booking.Core.Helpers.Services;
 using Booking.Core.Services;
 using Booking.Core.ServicesContract;
 using Booking.Infrastructure.Dbcontext;
@@ -7,6 +8,8 @@ using Booking.Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,9 +31,22 @@ builder.Host.ConfigureLogging(logging =>
     logging.AddDebug();
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<UploadImageService>();
+
+
+builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddSingleton<IStartupFilter>(new StartupFilterHelperService(InitializeHelperService));
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
 
 var app = builder.Build();
 
@@ -48,9 +64,14 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+void InitializeHelperService(IWebHostEnvironment webHostEnvironment)
+{
+    HelperService.Initialize(webHostEnvironment);
+}

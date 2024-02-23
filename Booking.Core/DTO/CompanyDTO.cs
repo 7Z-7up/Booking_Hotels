@@ -1,4 +1,5 @@
-﻿using Core.Domain.Entities;
+﻿using Booking.Core.Helpers.Enums;
+using Core.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,24 @@ namespace Booking.Core.DTO
 {
     public class CompanyDTO 
     {
+       
+            [DisplayName("Upload Image")]
+            public IFormFile? ImageFile { get; set; }
+
+            public CompanyDTO()
+            {
+
+            }
+
+            public CompanyDTO(Company company)
+            {
+                Name = company.Name;
+                ID = company.ID;
+                Image = company.Image;
+            }
+        
+
+
         [Required(ErrorMessage ="You Must Provide ID")]
         public Guid Id { get; set; }
         [Required(ErrorMessage ="You Must Provide Name")]
