@@ -1,5 +1,6 @@
 ﻿using Booking.Core.Domain.RepositoryContracts;
 using Booking.Core.DTO;
+using Booking.Core.Helpers.Services;
 using Core.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,7 +44,9 @@ namespace Booking.UI.Controllers
                 if (companyDTO.ImageFile != null)
                 {
                     if (companyDTO.ImageFile.ContentType.StartsWith("image/"))
-                        company.Image = await UploadFileAsync(companyDTO.ImageFile);
+                        //  company.Image = await UploadFileAsync(companyDTO.ImageFile);
+                        company.Image = await HelperService.UploadImage(companyDTO.ImageFile, "company");
+
                     else
                     {
                         ModelState.AddModelError("ImageFile", "Wrong File Format!");

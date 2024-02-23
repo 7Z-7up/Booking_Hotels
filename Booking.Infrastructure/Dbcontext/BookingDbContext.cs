@@ -17,6 +17,7 @@ namespace Booking.Infrastructure.Dbcontext
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<RoomOrder> RoomOrders { get; set; }
+        public virtual DbSet<RoomImages> RoomImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +38,7 @@ namespace Booking.Infrastructure.Dbcontext
             modelBuilder.Entity<Company>().Property(c=>c.TotalProfits).HasColumnType("DECIMAL(18, 2)");
             modelBuilder.Entity<Order>().Property(o=>o.TotalCost).HasColumnType("DECIMAL(18, 2)");
             modelBuilder.Entity<Room>().Property(r=>r.Price).HasColumnType("DECIMAL(18, 2)");
+            modelBuilder.Entity<RoomImages>().HasKey(ro => new {ro.RoomId,ro.Image});
 
 
         }
