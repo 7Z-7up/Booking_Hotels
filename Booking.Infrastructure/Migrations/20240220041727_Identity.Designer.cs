@@ -4,6 +4,7 @@ using Booking.Infrastructure.Dbcontext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Booking.Infrastructure.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    partial class BookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240220041727_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,19 +48,6 @@ namespace Booking.Infrastructure.Migrations
                     b.HasIndex("CustomerID");
 
                     b.ToTable("Tb_Order");
-                });
-
-            modelBuilder.Entity("Booking.Core.Domain.Entities.RoomImages", b =>
-                {
-                    b.Property<Guid>("RoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("RoomId", "Image");
-
-                    b.ToTable("RoomImages");
                 });
 
             modelBuilder.Entity("Booking.Core.Domain.Entities.RoomOrder", b =>
@@ -288,6 +278,9 @@ namespace Booking.Infrastructure.Migrations
                     b.Property<Guid>("HotelId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Images")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -424,17 +417,6 @@ namespace Booking.Infrastructure.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Booking.Core.Domain.Entities.RoomImages", b =>
-                {
-                    b.HasOne("Core.Domain.Entities.Room", "Room")
-                        .WithMany("Images")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Room");
-                });
-
             modelBuilder.Entity("Booking.Core.Domain.Entities.RoomOrder", b =>
                 {
                     b.HasOne("Booking.Core.Domain.Entities.Order", "Order")
@@ -457,9 +439,9 @@ namespace Booking.Infrastructure.Migrations
             modelBuilder.Entity("Core.Domain.Entities.Company", b =>
                 {
                     b.HasOne("Booking.Core.Domain.IdentityEntities.AppUser", "AppUser")
-                        .WithOne()
-                        .HasForeignKey("Core.Domain.Entities.Company", "ID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithMany()
+                        .HasForeignKey("ID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AppUser");
@@ -468,9 +450,9 @@ namespace Booking.Infrastructure.Migrations
             modelBuilder.Entity("Core.Domain.Entities.Customer", b =>
                 {
                     b.HasOne("Booking.Core.Domain.IdentityEntities.AppUser", "AppUser")
-                        .WithOne()
-                        .HasForeignKey("Core.Domain.Entities.Customer", "ID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithMany()
+                        .HasForeignKey("ID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("AppUser");
@@ -562,11 +544,6 @@ namespace Booking.Infrastructure.Migrations
             modelBuilder.Entity("Core.Domain.Entities.Hotel", b =>
                 {
                     b.Navigation("Rooms");
-                });
-
-            modelBuilder.Entity("Core.Domain.Entities.Room", b =>
-                {
-                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

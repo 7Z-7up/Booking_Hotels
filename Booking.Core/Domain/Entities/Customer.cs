@@ -1,4 +1,6 @@
 ﻿using Booking.Core.Domain.Entities;
+using Booking.Core.Domain.IdentityEntities;
+using Booking.Core.DTO;
 using Booking.Core.Helpers.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,6 +11,7 @@ namespace Core.Domain.Entities
     public class Customer
     {
         [Key]
+        [ForeignKey(nameof(AppUser))]
         public Guid ID { get; set; }
         [DataType(DataType.ImageUrl)]
         public string? ImageUrl { get; set; }
@@ -31,5 +34,25 @@ namespace Core.Domain.Entities
         public Gender Gender { get; set; }
         public bool IsDeleted { get; set; } = false;
         public virtual ICollection<Order>? Orders { get; set; }
+        public virtual AppUser? AppUser { get; set; }
+
     }
+    public static class CustomerExtention
+    {
+        public static CustomerDTO ToCustomerDTO(this Customer customer)
+        {
+            return new CustomerDTO()
+            {
+                ID = customer.ID,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                PhoneNumber = customer.PhoneNumber,
+                Email = customer.Email,
+                Gender = customer.Gender,
+                DateOfBirth = customer.DateOfBirth,
+                ImageUrl = customer.ImageUrl,
+            };
+        }
+    }
+
 }
