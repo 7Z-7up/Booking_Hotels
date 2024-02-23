@@ -31,6 +31,7 @@ builder.Host.ConfigureLogging(logging =>
     logging.AddDebug();
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddSingleton<IStartupFilter>(new StartupFilterHelperService(InitializeHelperService));
 builder.Services.AddSession(options =>
@@ -41,6 +42,7 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddScoped<ICustomerService,CustomerService>();
+
 
 var app = builder.Build();
 
