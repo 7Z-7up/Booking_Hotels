@@ -32,13 +32,13 @@ builder.Host.ConfigureLogging(logging =>
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IOrderForAdminService, OrderForAdminService>();
-
+builder.Services.AddScoped<IOrderForUserService, OrderForUserService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<UploadImageService>();
 
 
-builder.Services.AddScoped<IRoomService, RoomService>();
+//builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddSingleton<IStartupFilter>(new StartupFilterHelperService(InitializeHelperService));
 builder.Services.AddSession(options =>
 {
@@ -66,11 +66,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-
-app.MapControllerRoute(
-    name: "Orders",
-    pattern: "{area= Orders}/{controller=Orders}/{action=Index}/{id?}"
-);
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

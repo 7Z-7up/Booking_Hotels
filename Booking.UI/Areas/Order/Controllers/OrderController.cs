@@ -1,8 +1,10 @@
 ﻿using Booking.Core.ServicesContract;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Booking.UI.Areas.Orders.Controllers
+namespace Booking.UI.Areas.Order.Controllers
 {
+    [Area("Order")]
+    [Route("Order/[Controller]/[action]")]
     public class OrderController : Controller
     {
         public IOrderForUserService orderForUserService;

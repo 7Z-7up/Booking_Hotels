@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<Booking.Core.DTO.OrderForUserDTO>
 
 @{
-    ViewData["Title"] = "Detail";
+    ViewData["Title"] = "Index";
 }
 
-<h1>Detail</h1>
+<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -67,9 +64,8 @@
                 @Html.DisplayFor(modelItem => item.OrderId)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Detail", "Detail", new { id = item.OrderId }) |
+                @Html.ActionLink("Delete", "Delete", new {  id=item.OrderId })
             </td>
         </tr>
 }
