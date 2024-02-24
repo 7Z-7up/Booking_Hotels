@@ -20,6 +20,9 @@ namespace Booking.Infrastructure.Repository
         public IBaseRepository<Order> Orders { get; private set; }
         public IBaseRepository<Room> Rooms { get; private set; }
         public IBaseRepository<RoomOrder> RoomOrders { get; private set; }
+
+        public IBaseRepository<HotelImages> HotelImages {  get; private set; }
+
         public UnitOfWork(BookingDbContext context)
         {
             _context = context;
@@ -29,6 +32,7 @@ namespace Booking.Infrastructure.Repository
             Orders = new BaseRepository<Order>(_context);
             Rooms = new BaseRepository<Room>(_context);
             RoomOrders = new BaseRepository<RoomOrder>(_context);
+            HotelImages = new BaseRepository<HotelImages>(_context);
         }
 
         public int Complete()

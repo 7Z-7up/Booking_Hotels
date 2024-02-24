@@ -1,0 +1,35 @@
+﻿@model Booking.Core.DTO.hotel.HotelDto
+
+<style>
+    .carousel-inner img {
+        width: 100%;
+        height: 300px;
+    }
+
+</style>
+
+<div class="container">
+    <div id="sliderCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @foreach (var image in Model.ImagePath)
+            {
+                <div class="carousel-item active">
+                    <img src="~/images/Hotel/@image" class="d-block w-100" alt="Slide 1">
+                </div>
+            }
+            <!-- Add more carousel items as needed -->
+        </div>
+        
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+}

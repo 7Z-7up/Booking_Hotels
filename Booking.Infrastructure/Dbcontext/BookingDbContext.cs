@@ -18,7 +18,7 @@ namespace Booking.Infrastructure.Dbcontext
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<RoomOrder> RoomOrders { get; set; }
-
+        public virtual DbSet<HotelImages> HotelImages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -30,6 +30,7 @@ namespace Booking.Infrastructure.Dbcontext
             modelBuilder.Entity<Order>().HasOne(o => o.Customer).WithMany(c => c.Orders).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Room>().HasOne(r=>r.Hotel).WithMany(h=>h.Rooms).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<RoomOrder>().HasKey(ro => new { ro.OrderID, ro.RoomID });
+            modelBuilder.Entity<HotelImages>().HasKey(ro => new { ro.hotelId, ro.Image });
 
             //configure tables Properties
 

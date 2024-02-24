@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Booking.Core.Domain.Entities;
 
 namespace Core.Domain.Entities
 {
@@ -25,7 +26,7 @@ namespace Core.Domain.Entities
         [MaxLength(100)]
         public string Address { get; set; }
 
-        public ICollection<string>? Images { get; set; }
+        //public ICollection<string>? Images { get; set; }
 
         //public bool AdditionalServices { get; set; }
 
@@ -35,6 +36,7 @@ namespace Core.Domain.Entities
         public bool IsDeleted { get; set; } = false;
         public virtual Company? Company { get; set; }
         public virtual ICollection<Room>? Rooms { get; set; }
+        public virtual IEnumerable<HotelImages>? Images { get; set; }
 
     }
 }
