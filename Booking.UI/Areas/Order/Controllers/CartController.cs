@@ -6,7 +6,7 @@ using Core.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Booking.UI.Areas.Orders.Controllers
+namespace Booking.UI.Areas.Order.Controllers
 {
     public class CartController : Controller
     {

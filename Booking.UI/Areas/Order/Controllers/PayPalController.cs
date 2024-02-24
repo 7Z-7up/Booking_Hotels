@@ -1,7 +1,7 @@
 ﻿using Booking.Core.Helpers.Classes;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Booking.UI.Areas.Orders.Controllers
+namespace Booking.UI.Areas.Order.Controllers
 {
     public class PayPalController : Controller
     {

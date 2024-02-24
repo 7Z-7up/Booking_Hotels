@@ -22,7 +22,7 @@ namespace Booking.Core.Services
 
         public async Task<IEnumerable<OrderForUserDTO>> GetHistoryUserOrder(Guid id)
         {
-            var OrdersDetailsForUser = await UnitOfWork.RoomOrders.FindAll((R => R.IsDeleted == false && R.Order.Customer.ID == id));
+            var OrdersDetailsForUser = await UnitOfWork.RoomOrders.FindAll((R => R.IsDeleted == false && R.Order.Customer.ID == id),R=>R.Order ,R=>R.Room,R=>R.Room.Hotel);
             List<OrderForUserDTO> ordersDetailsForUser = new List<OrderForUserDTO>();
             foreach (var order in OrdersDetailsForUser)
             {
@@ -34,6 +34,7 @@ namespace Booking.Core.Services
                 ordercopy.HotelName = order.Room.Hotel.Name;
                 ordercopy.TotalCost = order.Order.TotalCost;
                 ordercopy.OrderId = order.OrderID;
+                ordersDetailsForUser.Add(ordercopy);
             }
             return ordersDetailsForUser;
         }
@@ -60,7 +61,7 @@ namespace Booking.Core.Services
 
         public async Task<OrderForUserDTO> GetOrderId(Guid id)
         {
-            var order = await UnitOfWork.RoomOrders.Find(d => d.IsDeleted == false && d.Order.ID == id, i => i.Order, i => i.Room);
+            var order = await UnitOfWork.RoomOrders.Find(d => d.IsDeleted == false && d.Order.ID == id, i => i.Order, i => i.Room ,i=>i.Room.Hotel);
             OrderForUserDTO ordercopy = new OrderForUserDTO();
             ordercopy.Start_Date = order.Start_Date;
             ordercopy.End_Date = order.End_Date;

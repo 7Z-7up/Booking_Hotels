@@ -117,5 +117,10 @@ namespace Booking.Infrastructure.Repository
         {
             return await _context.Set<T>().CountAsync(criteria);
         }
+
+        /*public Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null)
+        {
+            throw new NotImplementedException();
+        }*/
     }
 }
