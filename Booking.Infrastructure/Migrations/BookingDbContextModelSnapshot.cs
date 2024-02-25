@@ -22,6 +22,19 @@ namespace Booking.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Booking.Core.Domain.Entities.HotelImages", b =>
+                {
+                    b.Property<Guid>("hotelId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("hotelId", "Image");
+
+                    b.ToTable("Tb_HotelImages");
+                });
+
             modelBuilder.Entity("Booking.Core.Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("ID")
@@ -287,6 +300,9 @@ namespace Booking.Infrastructure.Migrations
 
                     b.Property<Guid>("HotelId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Images")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -561,6 +577,8 @@ namespace Booking.Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Domain.Entities.Hotel", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("Rooms");
                 });
 
