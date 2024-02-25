@@ -26,15 +26,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Booking.Core\Booking.Core.csproj" />
-    <ProjectReference Include="..\Booking.Infrastructure\Booking.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\images\room\" />
     <Folder Include="Areas\Company\Data\" />
     <Folder Include="Areas\Company\Models\" />
     <Folder Include="Areas\Company\Views\" />
+    <Folder Include="Areas\Order\Data\" />
+    <Folder Include="Areas\Order\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Booking.Core\Booking.Core.csproj" />
+    <ProjectReference Include="..\Booking.Infrastructure\Booking.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
