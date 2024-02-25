@@ -148,15 +148,15 @@
 
 
     
-//        public  async Task<ServiceResult>  UpdateRoom(Guid id,RoomDTO newRoom)
-//        {
-//            var room = await UnitOfWork.Rooms.Find(r=>r.ID==id && r.IsDeleted== false,r);
-//            if (room != null)
-//            {
-//                room.Price = newRoom.Price;
-//                room.Taken = newRoom.Taken;
-//                room.Type = newRoom.Type;
-//                room.Number = newRoom.RoomNum;
+        public  async Task<ServiceResult>  UpdateRoom(Guid id,RoomDTO newRoom)
+        {
+            var room = await UnitOfWork.Rooms.Find(r => r.ID == id && r.IsDeleted == false, r=>r.Images);//var room = await UnitOfWork.Rooms.Find(r=>r.ID==id && r.IsDeleted== false,["Images"]);
+            if (room != null)
+            {
+                room.Price = newRoom.Price;
+                room.Taken = newRoom.Taken;
+                room.Type = newRoom.Type;
+                room.Number = newRoom.RoomNum;
             
 
 //                UnitOfWork.Rooms.Update(room);

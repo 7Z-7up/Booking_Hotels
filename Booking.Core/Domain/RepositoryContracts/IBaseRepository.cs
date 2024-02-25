@@ -17,8 +17,7 @@ namespace Booking.Core.Domain.RepositoryContracts
 
         Task<T> Find(Expression<Func<T, bool>> criteria, params Expression<Func<T, object>>[] includes);
 
-        //Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null);
-        //Task<IEnumerable<TResult>> FindAll<TResult>(Expression<Func<T, bool>> criteria, Expression<Func<T, TResult>> projection, string[] includes = null);
+        Task<IEnumerable<TResult>> FindAll<TResult>(Expression<Func<T, bool>> criteria, Expression<Func<T, TResult>> projection, string[] includes = null);
         Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, params Expression<Func<T, object>>[] includes);
 
         Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, int skip, int take);
