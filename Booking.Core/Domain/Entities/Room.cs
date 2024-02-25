@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Booking.Core.Helpers.Enums;
+using Booking.Core.Domain.Entities;
 namespace Core.Domain.Entities
 {
     [Table("Tb_Room")]
@@ -28,7 +29,8 @@ namespace Core.Domain.Entities
         [Required]
         public RoomType Type { get; set; }
 
-        public ICollection<string>? Images { get; set; }
+      //  public ICollection<string>? Images { get; set; }
+        public virtual ICollection<RoomImages>? Images { get; set; }
 
         [Required]
         [ForeignKey("Hotel")]

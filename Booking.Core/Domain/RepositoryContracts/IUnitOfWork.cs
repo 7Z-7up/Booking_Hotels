@@ -17,6 +17,7 @@ namespace Booking.Core.Domain.RepositoryContracts
         IBaseRepository<Room> Rooms { get; }
         IBaseRepository<RoomOrder> RoomOrders { get; }
         IBaseRepository<HotelImages> HotelImages { get; }
+        IBaseRepository<RoomImages> RoomImages { get; }
 
         int Complete();
     }

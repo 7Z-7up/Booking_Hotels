@@ -3,6 +3,7 @@ using Booking.Core.Domain.RepositoryContracts;
 using Booking.Core.Helpers.Enums;
 using Booking.Infrastructure.Dbcontext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,16 @@ namespace Booking.Infrastructure.Repository
                     query = query.Include(incluse);
 
             return await query.SingleOrDefaultAsync(criteria);
+        }
+        public async Task<IEnumerable<TResult>> FindAll<TResult>(Expression<Func<T, bool>> criteria, Expression<Func<T, TResult>> projection, string[] includes = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            if (includes != null)
+                foreach (var include in includes)
+                    query = query.Include(include);
+
+            return await query.Where(criteria).Select(projection).ToListAsync();
         }
 
         public async Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, params Expression<Func<T, object>>[] includes)
@@ -106,5 +117,10 @@ namespace Booking.Infrastructure.Repository
         {
             return await _context.Set<T>().CountAsync(criteria);
         }
+
+        /*public Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null)
+        {
+            throw new NotImplementedException();
+        }*/
     }
 }
