@@ -150,7 +150,7 @@ namespace Booking.Core.Services
     
         public  async Task<ServiceResult>  UpdateRoom(Guid id,RoomDTO newRoom)
         {
-            var room = await UnitOfWork.Rooms.Find(r=>r.ID==id && r.IsDeleted== false,["Images"]);
+            var room = await UnitOfWork.Rooms.Find(r => r.ID == id && r.IsDeleted == false, r=>r.Images);//var room = await UnitOfWork.Rooms.Find(r=>r.ID==id && r.IsDeleted== false,["Images"]);
             if (room != null)
             {
                 room.Price = newRoom.Price;
