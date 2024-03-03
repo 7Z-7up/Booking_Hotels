@@ -1,4 +1,5 @@
-﻿using Booking.Core.DTO;
+﻿using Booking.Core.Domain.Entities;
+using Booking.Core.DTO;
 using Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,11 @@ namespace Booking.Core.ServicesContract
 {
     public interface IOrderForCart
     {
-        public Task Create(List<Room> rooms, CreateOrderDTO createOrderDTO);
+        public Task Create(Guid Uesrid, CreateOrderDTO createOrderDTO);
         public Task Delete(Guid RoomId, CreateOrderDTO createOrderDTO);
-        public Task Update(Guid OrderId, CreateOrderDTO createOrderDTO);
+        public Task<CreateOrderDTO> PutRoomsInDTO(List<Guid> roomid);
+        //public Task Update(Guid OrderId, CreateOrderDTO createOrderDTO);
         public Task<Room> GetById(Guid RoomId);
+        public Task<Order> GetOrderById(Guid Order);
     }
 }
