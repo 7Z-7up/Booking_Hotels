@@ -42,10 +42,13 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 
+
+builder.Services.AddScoped<IHotelService, HotelService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<UploadImageService>();
 
 
-//builder.Services.AddScoped<IRoomService, RoomService>();
+
 builder.Services.AddSingleton<IStartupFilter>(new StartupFilterHelperService(InitializeHelperService));
 builder.Services.AddSession(options =>
 {
