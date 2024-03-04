@@ -1,26 +1,24 @@
-﻿using Booking.Core.Helpers.Classes;
+﻿using Booking.Core.ServicesContract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Booking.UI.Areas.Order.Controllers
 {
+    [Area("Order")]
+    [Route("Order/[Controller]/[action]")]
     public class PayPalController : Controller
     {
-        private readonly PaypalClient _paypalClient;
-
-        public PayPalController(PaypalClient paypalClient)
+        public IOrderForUserService OrderForUserService;
+        public PayPalController(IOrderForUserService OrderForUserService)
         {
-            this._paypalClient = paypalClient;
+           this.OrderForUserService = OrderForUserService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(Guid orderId)
         {
-            // ViewBag.ClientId is used to get the Paypal Checkout javascript SDK
-            ViewBag.ClientId = _paypalClient.ClientId;
-
-            return View();
+            return View(await OrderForUserService.GetOrderId(orderId));
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public async Task<IActionResult> Order(CancellationToken cancellationToken)
         {
             try
@@ -76,6 +74,6 @@ namespace Booking.UI.Areas.Order.Controllers
         public IActionResult Success()
         {
             return View();
-        }
+        }*/
     }
 }

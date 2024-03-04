@@ -4,47 +4,72 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<style>
+    .details-container {
+        background-color: #f8f9fa; /* Light gray background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+    }
 
-<div>
-    <h4>OrdersForAdmin</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalCost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TotalCost)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Number)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Number)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Type)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Start_Date)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Start_Date)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.End_Date)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.End_Date)
-        </dd>
-    </dl>
+    .details-heading {
+        color: #007bff; /* Blue heading */
+    }
+
+    .details-label {
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="details-container">
+                <h1 class="text-center details-heading">Details</h1>
+
+                <div>
+                    <h4>OrdersForAdmin</h4>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-2 details-label">
+                            @Html.DisplayNameFor(model => model.Id)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Id)
+                        </dd>
+                        <dt class="col-sm-2 details-label">
+                            @Html.DisplayNameFor(model => model.TotalCost)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.TotalCost)
+                        </dd>
+                        <dt class="col-sm-2 details-label">
+                            @Html.DisplayNameFor(model => model.Number)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Number)
+                        </dd>
+                        <dt class="col-sm-2 details-label">
+                            @Html.DisplayNameFor(model => model.Type)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Type)
+                        </dd>
+                        <dt class="col-sm-2 details-label">
+                            @Html.DisplayNameFor(model => model.Start_Date)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Start_Date)
+                        </dd>
+                        <dt class="col-sm-2 details-label">
+                            @Html.DisplayNameFor(model => model.End_Date)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.End_Date)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
