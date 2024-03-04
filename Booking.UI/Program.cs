@@ -33,6 +33,12 @@ builder.Host.ConfigureLogging(logging =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IRoomService, RoomService>();
+
+builder.Services.AddScoped<IHotelService, HotelService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<UploadImageService>();
+
+
 builder.Services.AddSingleton<IStartupFilter>(new StartupFilterHelperService(InitializeHelperService));
 builder.Services.AddSession(options =>
 {
