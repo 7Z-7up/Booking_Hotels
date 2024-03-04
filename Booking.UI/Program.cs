@@ -34,8 +34,10 @@ builder.Host.ConfigureLogging(logging =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IOrderForAdminService, OrderForAdminService>();
 builder.Services.AddScoped<IOrderForUserService, OrderForUserService>();
+builder.Services.AddScoped<IOrderForCart, OrderForCart>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<UploadImageService>();
 
 

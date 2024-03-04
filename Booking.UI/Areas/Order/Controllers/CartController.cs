@@ -1,33 +1,62 @@
 ﻿using Booking.Core.Domain.Entities;
+using Booking.Core.Domain.IdentityEntities;
 using Booking.Core.DTO;
 using Booking.Core.Helpers.Classes;
+using Booking.Core.Services;
 using Booking.Core.ServicesContract;
+using Booking.UI.Controllers;
 using Core.Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.ConstrainedExecution;
+using System.Security.Claims;
 
 namespace Booking.UI.Areas.Order.Controllers
 {
+    [Area("Order")]
+    [Route("Order/[Controller]/[action]")]
     public class CartController : Controller
     {
         public IOrderForCart OrderForCart;
         private List<Room> roomsList;
-        public CartController(IOrderForCart orderForCart)
+        private List<Guid> orderedRoomIds;
+        private CreateOrderDTO createOrderDTO;
+        private readonly UserManager<AppUser> _userManager;
+        bool check=false;
+        public CartController(IOrderForCart orderForCart, UserManager<AppUser> _userManager)
         {
             OrderForCart = orderForCart;
+            createOrderDTO = new CreateOrderDTO();
         }
-        public IActionResult Create(List<Room>rooms) 
+        public async Task<IActionResult> Create() 
         {
-            roomsList = rooms;
-            ViewBag.rooms = rooms;
-            return View();
+            if (!check)
+            {
+                List<Guid> orderedRoomIds = HttpContext.Session.Get<List<Guid>>("RoomList") ?? new List<Guid>();
+                return View(await OrderForCart.PutRoomsInDTO(orderedRoomIds));
+            }
+            else
+            {
+                return View(createOrderDTO);
+            }
         }
-        public IActionResult Create(CreateOrderDTO createOrderDTO)
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateOrderDTO createOrderDTO)
         {
-            OrderForCart.Create(roomsList, createOrderDTO);
-            return View();
+            //if (ModelState.IsValid)
+            //{
+                //var currentUser = await _userManager.GetUserAsync(User);
+                Guid userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                //List<Guid> orderedRoomIds = HttpContext.Session.Get<List<Guid>>("RoomList") ?? new List<Guid>();
+                await OrderForCart.Create(userId, createOrderDTO);
+            return RedirectToAction("Index", "PayPal", new { orderId = createOrderDTO.OrderID});
+            //return View("",createOrderDTO);///change
+            //}
+            //return View(createOrderDTO);
         }
-        public IActionResult Edit()
+        /*public IActionResult Edit()
         {
             //CreateOrderDTO orderDTO = ;
             return View();
@@ -37,14 +66,18 @@ namespace Booking.UI.Areas.Order.Controllers
         {
             OrderForCart.Update(id, createOrderDTO);
             return RedirectToAction("Index");
-        }
+        }*/
 
-        public  async Task<IActionResult> remove(Guid id, CreateOrderDTO createOrderDTO)
+        public async Task<IActionResult> remove(Guid id)
         {
-            Room room = await OrderForCart.GetById(id);
-            OrderForCart.Delete(id, createOrderDTO);
-            roomsList.Remove(room);
-            return RedirectToAction("Index");
+            List<Guid> orderedRoomIds = HttpContext.Session.Get<List<Guid>>("RoomList") ?? new List<Guid>();
+            int indexToRemove = orderedRoomIds.IndexOf(id);
+            if (indexToRemove != -1)
+            {
+                orderedRoomIds.RemoveAt(indexToRemove);
+                HttpContext.Session.Set("RoomList", orderedRoomIds);
+            }
+            return RedirectToAction("Create");
         }
     }
 }

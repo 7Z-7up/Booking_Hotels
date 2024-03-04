@@ -61,15 +61,9 @@ namespace Booking.Core.Services
 
         public async Task<OrderForUserDTO> GetOrderId(Guid id)
         {
-            var order = await UnitOfWork.RoomOrders.Find(d => d.IsDeleted == false && d.Order.ID == id, i => i.Order, i => i.Room ,i=>i.Room.Hotel);
+            var order = await UnitOfWork.Orders.Find(d => d.IsDeleted == false && d.ID == id);
             OrderForUserDTO ordercopy = new OrderForUserDTO();
-            ordercopy.Start_Date = order.Start_Date;
-            ordercopy.End_Date = order.End_Date;
-            ordercopy.HotelRate = order.Room.Hotel.Rate;
-            ordercopy.HotelAddress = order.Room.Hotel.Address;
-            ordercopy.HotelName = order.Room.Hotel.Name;
-            ordercopy.TotalCost = order.Order.TotalCost;
-            ordercopy.OrderId = order.OrderID;
+            ordercopy.TotalCost= order.TotalCost;
             return ordercopy;
         }
 }
