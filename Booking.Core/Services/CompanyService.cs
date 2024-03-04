@@ -94,9 +94,29 @@ namespace Booking.Core.Services
             }
         }
 
-        public Task UpdateAsync(CompanyDTO customerDTO)
+        public async Task UpdateAsync(CompanyDTO companyDTO)
         {
-            throw new NotImplementedException();
+            Company company = CompanyDTO.ToCompany(companyDTO);
+            Company companyDataBase = await _unitOfWork.Companies.GetById(companyDTO.Id);
+            try
+            {
+                if (companyDTO.ImageFile != null)
+                {
+                    if (companyDTO.ImageFile.ContentType.StartsWith("image/"))
+                    {
+                        company.Image = await _uploadImageService.UploadFileAsync(companyDTO.ImageFile);
+                        if(companyDataBase.Image != null)
+                            await _uploadImageService.DeleteFileAsync(companyDataBase.Image);
+                    }
+                }
+
+                await _unitOfWork.Companies.Add(company);
+                _unitOfWork.Complete();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
         }
     }
 }

@@ -1,15 +1,97 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Booking.Core.DTO;
+using Booking.Core.ServicesContract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Booking.UI.Areas.Company.Controllers
 {
     [Area("Company")]
     [Route("Company/[Controller]/[action]")]
+    [Authorize(Roles ="Company")]
     public class CompanyController : Controller
     {
-        public IActionResult Index()
+        private readonly ICompanyService _companyService;
+
+        public CompanyController(ICompanyService companyService)
         {
-            return View();
+            _companyService = companyService;
         }
+
+        public async Task<IActionResult> Index()
+        {
+            var companyDTO = await _companyService.GetAll();
+            return View(companyDTO);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var company = _companyService.GetCompanyById(id);
+            if (company != null)
+            {
+                return View(company);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new CompanyDTO());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CompanyDTO companyDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                if (companyDTO.ImageFile != null)
+                {
+                    if (!companyDTO.ImageFile.ContentType.StartsWith("image/"))
+                    {
+                        ModelState.AddModelError("ImageFile", "Wrong File Format!");
+                        return View(companyDTO);
+                    }
+                }
+
+                return RedirectToAction("Index");
+            }
+
+            return View(companyDTO);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var companyDTO = _companyService.GetCompanyById(id);
+
+            return View(companyDTO);//companyDTO);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(CompanyDTO companyDTO)
+        {
+            if (ModelState.IsValid)
+            {
+                if (companyDTO.ImageFile != null)
+                {
+
+                    if (!companyDTO.ImageFile.ContentType.StartsWith("image/"))
+                    {
+                        ModelState.AddModelError("ImageFile", "Wrong File Format!");
+                        return View(companyDTO);
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+
+            return View(companyDTO);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await _companyService.DeleteAsync(id);
+            return RedirectToAction("Index");
+        }
+
     }
 }

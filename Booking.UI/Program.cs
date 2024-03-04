@@ -37,7 +37,11 @@ builder.Services.AddScoped<IOrderForUserService, OrderForUserService>();
 builder.Services.AddScoped<IOrderForCart, OrderForCart>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+
 builder.Services.AddScoped<UploadImageService>();
 
 

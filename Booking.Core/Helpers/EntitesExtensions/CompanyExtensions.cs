@@ -16,7 +16,8 @@ namespace Booking.Core.Helpers.EntitesExtensions
             {
                 Id = company.ID,
                 Name = company.Name,
-                TotalProfits = company.TotalProfits,
+                ImageUrl = company.Image,
+                TotalProfits = company.TotalProfits
             };
 
         }
