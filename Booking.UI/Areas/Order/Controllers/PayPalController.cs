@@ -15,7 +15,9 @@ namespace Booking.UI.Areas.Order.Controllers
 
         public async Task<IActionResult> Index(Guid orderId)
         {
+
             return View(await OrderForUserService.GetOrderId(orderId));
+
         }
 
         /*[HttpPost]

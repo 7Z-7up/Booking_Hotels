@@ -19,51 +19,89 @@ namespace Booking.Core.Services
         {
             this.UnitOfWork = UnitOfWork;
         }
-        public async Task Create(List<Room>rooms,CreateOrderDTO createOrderDTO)
+        public async Task<CreateOrderDTO> PutRoomsInDTO(List<Guid>roomid)
         {
-            Order order = new Order();
-            order.CustomerID = new Guid();
-            order.ID = new Guid();
-            order.PaymentType = PaymentType.PayPal;
-            order.TotalCost = 0;
-            await UnitOfWork.Orders.Add(order);
-            decimal TotalPrice = 0;
-            foreach (var room in rooms)
+            CreateOrderDTO createOrderDTOToAddToList = new CreateOrderDTO();
+            
+            foreach (var id in roomid)
             {
-                RoomOrder roomOrder = new RoomOrder();
-                roomOrder.Start_Date = createOrderDTO.Start_Date;
-                roomOrder.End_Date = createOrderDTO.End_Date;
-                roomOrder.OrderID = order.ID;
-                roomOrder.RoomID = createOrderDTO.RoomId;
-                var roomData= await UnitOfWork.Rooms.GetById(roomOrder.RoomID);
-                var roomPrice = roomData.Price;
-                int daysDifference = ((int)(roomOrder.End_Date - roomOrder.Start_Date).TotalDays)+1;
-                TotalPrice += (roomPrice*daysDifference);
-                await UnitOfWork.RoomOrders.Add(roomOrder);
+                Room room = await GetById(id);
+                createOrderDTOToAddToList.RoomId.Add(room.ID);
+                createOrderDTOToAddToList.Number.Add(room.Number);
+                createOrderDTOToAddToList.Price.Add(room.Price);
+                createOrderDTOToAddToList.Type.Add(room.Type);
             }
-            order.TotalCost =TotalPrice;
-            UnitOfWork.Orders.Update(order);
-            UnitOfWork.Complete();
+            return createOrderDTOToAddToList;
+        }
+        public async Task Create(Guid Uesrid, CreateOrderDTO createOrderDTO)
+        {
+            try
+            {
+                Order order = new Order();
+                Guid orderid = Guid.NewGuid();
+                order.ID = orderid;
+                decimal TotalPrice = 0;
+                order.PaymentType = PaymentType.PayPal;
+                order.TotalCost = 0;
+                await UnitOfWork.Orders.Add(order);
+                for (int i = 0; i < createOrderDTO.RoomId.Count; i++)
+                {
+                    order.CustomerID = Uesrid;
+                    createOrderDTO.OrderID.Add(orderid);
+                    createOrderDTO.CustomerId.Add(Uesrid);
+                    var x = UnitOfWork.Complete();
+                    Room room = await UnitOfWork.Rooms.GetById(createOrderDTO.RoomId[i]);
+                    room.Taken = true;
+                    UnitOfWork.Rooms.Update(room);
+                    var y = UnitOfWork.Complete();
+                    RoomOrder roomOrder = new RoomOrder();
+                    roomOrder.Start_Date = DateTime.Now;
+                    roomOrder.End_Date = DateTime.Now.AddDays(createOrderDTO.NumberofDays[i]);
+                    roomOrder.OrderID = orderid;
+                    roomOrder.RoomID = createOrderDTO.RoomId[i];
+                    await UnitOfWork.RoomOrders.Add(roomOrder);
+                    var z = UnitOfWork.Complete();
+                    var roomData = await UnitOfWork.Rooms.GetById(createOrderDTO.RoomId[i]);
+                    var roomPrice = roomData.Price;
+                    int daysDifference = ((int)(roomOrder.End_Date - roomOrder.Start_Date).TotalDays);
+                    TotalPrice += (roomPrice * daysDifference);
+                    //UnitOfWork.Complete();
+                }
+                order.TotalCost = TotalPrice;
+                UnitOfWork.Orders.Update(order);
+                int w = UnitOfWork.Complete();
+            }
+            catch(Exception e)
+            {
+                await Console.Out.WriteLineAsync(e.Message);
+            }
         }
 
         public async Task Delete(Guid RoomId, CreateOrderDTO createOrderDTO)
         {
-            var OrderRoom= await UnitOfWork.RoomOrders.Find(o=>o.IsDeleted==false&&o.Order.ID==createOrderDTO.OrderID&&o.RoomID== RoomId);
-            OrderRoom.IsDeleted=true;
-            int daysDifference = ((int)(OrderRoom.End_Date - OrderRoom.Start_Date).TotalDays) + 1;
-            Order order = await UnitOfWork.Orders.GetById(OrderRoom.OrderID);
-            Room room = await UnitOfWork.Rooms.GetById(OrderRoom.RoomID);
-            order.TotalCost-=daysDifference*room.Price;
-            UnitOfWork.RoomOrders.Update(OrderRoom);
-            UnitOfWork.Complete();
+            for(int i=0;i<createOrderDTO.RoomId.Count;i++)
+            {
+                if (createOrderDTO.RoomId[i]==RoomId)
+                {
+                    createOrderDTO.RoomId.RemoveAt(i);
+                    createOrderDTO.Number.RemoveAt(i);
+                    createOrderDTO.Price.RemoveAt(i);
+                    createOrderDTO.NumberofDays.RemoveAt(i);
+                    createOrderDTO.Type.RemoveAt(i);
+                }
+            }
         }
-
         public async Task<Room> GetById(Guid RoomId)
         {
-            return await UnitOfWork.Rooms.Find(r=>r.IsDeleted==false&&r.ID==RoomId);
+            return await UnitOfWork.Rooms.Find(r => r.IsDeleted == false && r.ID == RoomId);
         }
 
-        public async Task Update(Guid OrderId, CreateOrderDTO createOrderDTO)
+        public async Task<Order> GetOrderById(Guid Order)
+        {
+            return await UnitOfWork.Orders.Find(r => r.IsDeleted == false && r.ID == Order);
+        }
+
+        /*public async Task Update(Guid OrderId, CreateOrderDTO createOrderDTO)
         {
             var OrderRooms = await UnitOfWork.RoomOrders.FindAll(o => o.IsDeleted == false && o.Order.ID == createOrderDTO.OrderID);
             Order order = await UnitOfWork.Orders.GetById(createOrderDTO.OrderID);
@@ -85,6 +123,6 @@ namespace Booking.Core.Services
             order.TotalCost = TotalPrice;
             UnitOfWork.Orders.Update(order);
             UnitOfWork.Complete();
-        }
+        }*/
     }
 }

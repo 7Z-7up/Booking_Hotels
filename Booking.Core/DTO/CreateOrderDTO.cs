@@ -14,19 +14,39 @@ namespace Booking.Core.DTO
     public class CreateOrderDTO
     {
         [Required]
-        public Guid RoomId { get; set; }
+        public List<Guid> RoomId { get; set; }
 
         [Required]
-        public Guid CustomerId { get; set; }
-        
-        [Required]
-        public DateTime Start_Date { get; set; }
-        
-        [Required]
-        public DateTime End_Date { get; set; }
+        public List<Guid> CustomerId { get; set; }
 
         [ForeignKey(nameof(Order))]
-        public Guid OrderID { get; set; }
+        public List<Guid> OrderID { get; set; }
 
+        [Required]
+        [Range(1, int.MaxValue)]
+        public List<int> NumberofDays { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue)]
+        public List<int> Number { get; set; }
+
+        [Required]
+        [Range(0.01, double.MaxValue)]
+        [DataType(DataType.Currency)]
+        public List<decimal> Price { get; set; }
+
+        [Required]
+        public List<RoomType> Type { get; set; }
+
+        public CreateOrderDTO()
+        {
+            Number = new List<int>();
+            RoomId = new List<Guid>();
+            CustomerId = new List<Guid>();
+            Type = new List<RoomType>();
+            Price = new List<decimal>();
+            OrderID = new List<Guid>();
+            NumberofDays=new List<int>();
+        }
     }
 }
