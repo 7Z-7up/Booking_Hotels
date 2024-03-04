@@ -13,31 +13,28 @@ namespace Booking.Core.DTO
 {
     public class CompanyDTO 
     {
-       
-            [DisplayName("Upload Image")]
-            public IFormFile? ImageFile { get; set; }
-
-            public CompanyDTO()
-            {
-
-            }
-
-            public CompanyDTO(Company company)
-            {
-                Name = company.Name;
-                ID = company.ID;
-                Image = company.Image;
-            }
-        
-
-
+              
         [Required(ErrorMessage ="You Must Provide ID")]
         public Guid Id { get; set; }
         [Required(ErrorMessage ="You Must Provide Name")]
         public string Name { get; set; }
         [DisplayName("Upload Image")]
         public IFormFile? ImageFile { get; set; }
+        public string ImageUrl { get; set; }
         public decimal? TotalProfits { get; set; }
+        [DataType(DataType.Password)]
+        [PasswordPropertyText]
+        public string Password { get; set; }
+        [DataType(DataType.Password)]
+        [PasswordPropertyText]
+        [Compare(nameof(Password), ErrorMessage = "Password and Confirm Password Are Different")]
+        public string ConfirmPassword { get; set; }
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
+        [MaxLength(100)]
+        [Required(ErrorMessage = "You Must Enter an Email Address")]
+        public string Email { get; set; }
+
         public static Company ToCompany(CompanyDTO companyDto)
         {
             return new Company()

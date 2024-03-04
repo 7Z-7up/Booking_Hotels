@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Booking.Core.DTO.OrdersForAdminDTO>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    .table-container {
+        background-color: #f8f9fa; /* Light gray background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+    }
+
+    .table-header {
+        background-color: #007bff; /* Blue header background */
+        color: #fff; /* White text */
+    }
+
+    .table-row:hover {
+        background-color: #e9ecef; /* Light gray hover effect */
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="table-container">
+                <h1 class="text-center">Index</h1>
+                <table class="table table-striped">
+                    <thead class="table-header">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Id)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TotalCost)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Number)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Type)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Start_Date)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.End_Date)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="table-row">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TotalCost)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Number)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Type)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Start_Date)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.End_Date)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Details", "Details", new { id = item.Id })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

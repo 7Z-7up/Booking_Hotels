@@ -20,7 +20,7 @@ namespace Booking.Core.Domain.Entities
         [Required]
         public DateTime End_Date { get; set; }
         public virtual Order? Order { get; set; }
-        public virtual Room? Room { get; set; }
+        public virtual Room? Room { get; set; }/*=new Room();*/
         public bool IsDeleted { get; set; } = false;
 
     }

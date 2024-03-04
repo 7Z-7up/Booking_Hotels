@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Booking.Core.DTO.hotel.HotelDto>
+
+@* @{
+    ViewData["Title"] = "Index";
+}
+ *@
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <title>Villa Agency - Real Estate HTML5 Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/css/fontawesome.css">
+    <link rel="stylesheet" href="/css/Templatemo.css">
+    <link rel="stylesheet" href="/css/Owl.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+    <!--
+
+    TemplateMo 591 villa agency
+
+    https://templatemo.com/tm-591-villa-agency
+
+    -->
+
+    @* ///////////////// *@
+    @* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> *@
+    @* <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> *@
+    @* <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> *@
+    @* /////////////////////////////////////// *@
+    @* <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> *@
+  <!-- Custom CSS -->
+  <style>
+    .carousel-inner img {
+      width: 100%;
+      height: 300px;
+    }
+    *{
+        box-sizing:border-box;
+    }
+
+		
+  </style>
+  @* /////////////////////////////// *@
+</head>
+
+<body>
+
+
+<div class="row">
+
+    @foreach (var item in Model)
+    {
+    
+            <div class="col-lg-3 col-md-6 my-2 py-2">
+                <div class="item ">
+                    <div id="sliderCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner  ">
+                            @foreach (var it in item.ImagePath)
+                            {
+
+                                <div class="carousel-item active ">
+                                    <img src="/images/Hotel/@it" class="d-block w-100" alt="Slide 2">
+                                    @* <div class="carousel-caption d-none d-md-block">
+                                        <h5>Slide 1</h5>
+                                        <p>Description of Slide 1</p>
+                                    </div> *@
+                                </div>
+
+
+                            }
+                        </div>
+                    </div>
+                    @* <a href="property-details.html"><img src="/images/Hotel/@item.ImagePath[0]" alt=""></a> *@
+                    <span class="category">Hotel</span>
+                    <h6>@item.Rate</h6>
+                        <h4><a asp-action="Details" asp-route-id="@item?.ID">@item.Name</a></h4>
+                    <ul>
+                        <li>Location: <span class="fs-6">@item.Address</span></li>
+                      </ul>
+                    <div class="main-button">
+                            <a href="property-details.html">Go to Rooms</a>
+                    </div>
+                    
+                </div>
+            </div>
+        
+    }
+    </div>
+
+</body> 
+</html>
+
+
+Go to Rooms
+
+        @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+            }
+   

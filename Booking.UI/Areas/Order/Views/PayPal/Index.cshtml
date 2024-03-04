@@ -1,0 +1,87 @@
+﻿@model Booking.Core.DTO.OrderForUserDTO
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="text-center">
+                <div id="paypal-button-container"></div>
+            </div>
+        </div>
+    </div>
+
+
+<script src="https://www.paypal.com/sdk/js?client-id=ASMkGBLAJws-498GTxLUNN09yTHXsQSAF7-iQOg58anj05mTVCoWlMzUJabqRbUoVKyecb4kY20IenVR"></script>
+
+<script>
+    paypal.Buttons({
+        createOrder: function (data, actions) {
+            // Set up the transaction details
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: @Model.TotalCost // Set the payment amount
+
+                        }
+
+                }]
+            });
+        },
+        onApprove: function (data, actions) {
+            // Capture the payment when the user approves the transaction
+            return actions.order.capture().then(function (details) {
+                // Handle successful payment
+                alert('Transaction completed by ' + details.payer.name.given_name);
+                // Redirect or show a success message
+            });
+        }
+    }).render('#paypal-button-container');
+</script>
+
+
+@*<div id="paypal-button-container" class="bbtn"></div>*@
+@*@section Scripts {
+    @*Use ViewBag.ClientId to load Paypal Javascript SDK*@
+    @*<script src="https://www.paypal.com/sdk/js?client-id=ARhjVr3cyacpJMlXbUQfis9jz40E6HOAUByIJhmFD_0YiHM6L_2Yr3Z47nLbLGJPCHND-Xg97pX0hApo"></script>
+
+    <script>
+        paypal.Buttons({
+            style: {
+                layout: 'vertical',
+                color: 'silver',
+                tagline: 'false'
+            },
+
+            createOrder: (data, actions) => {
+                debugger
+
+                return fetch("@Url.Action("Order")", {
+                    method: "post",
+                }).then((response) => {
+                    if (!response.ok) {
+                        return response.json().then(error => { throw error; });
+                    }
+
+                    return response.json();
+                }).then((order) => order.id)
+                .catch(error => alert(error.message));
+            },
+            onApprove: (data, actions) => {
+                return fetch(`@Url.Action("Capture")?orderId=${data.orderID}`, {
+                    method: "post",
+                }).then((response) => {
+                    if (!response.ok) {
+                        return response.json().then(error => { throw error; });
+                    }
+
+                    window.location.href = "@Url.Action("Success")";
+                }).catch(error => alert(error.message));
+            }
+        }).render('#paypal-button-container');
+    </script>
+}*@

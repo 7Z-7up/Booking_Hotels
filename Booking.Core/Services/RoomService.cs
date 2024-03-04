@@ -29,9 +29,9 @@ namespace Booking.Core.Services
         }
         public async Task<IEnumerable<RoomDTO>> GetAllRooms()
         {
-           
+
             var roomss = await UnitOfWork.Rooms.FindAll(x => x.IsDeleted == false && x.Taken == false);
-            
+
             List<RoomDTO> roomDTOs = new List<RoomDTO>();
             foreach (var room in roomss)
             {
@@ -48,24 +48,24 @@ namespace Booking.Core.Services
                 roomDTOs.Add(roomDTO);
             }
             return roomDTOs.ToArray();
-        
+
         }
 
         public async Task<RoomDTO> GetRoomById(Guid id)
         {
             var room = await UnitOfWork.Rooms.Find(x => x.IsDeleted == false && x.ID == id);
 
-                RoomDTO roomDTO = new RoomDTO();
-                roomDTO.ID = room.ID;
-                roomDTO.Price = room.Price;
-                roomDTO.Taken = room.Taken;
-                roomDTO.Type = room.Type;
-                roomDTO.RoomNum = room.Number;
-                roomDTO.HotelName = "Hotel A";
-                roomDTO.Images = await UnitOfWork.RoomImages.FindAll(x => x.RoomId == room.ID,
-                    img => img.Image);
+            RoomDTO roomDTO = new RoomDTO();
+            roomDTO.ID = room.ID;
+            roomDTO.Price = room.Price;
+            roomDTO.Taken = room.Taken;
+            roomDTO.Type = room.Type;
+            roomDTO.RoomNum = room.Number;
+            roomDTO.HotelName = "Hotel A";
+            roomDTO.Images = await UnitOfWork.RoomImages.FindAll(x => x.RoomId == room.ID,
+                img => img.Image);
 
-                return roomDTO;
+            return roomDTO;
         }
 
 
@@ -80,7 +80,7 @@ namespace Booking.Core.Services
                     Taken = roomDTO.Taken,
                     Type = roomDTO.Type,
                     Number = roomDTO.RoomNum,
-                    HotelId = Guid.Parse( "ffdb7ef5-e58d-462b-abe8-34740d30f3a5")
+                    HotelId = Guid.Parse("ffdb7ef5-e58d-462b-abe8-34740d30f3a5")
                     // Handle ImageFiles and HotelName as needed
                     // Hotel = roomDTO.HotelName
                 };
@@ -140,34 +140,35 @@ namespace Booking.Core.Services
                 UnitOfWork.Complete();
                 return new ServiceResult { Success = true };
             }
-            else {
+            else
+            {
                 return new ServiceResult { Success = false, ErrorMessage = "No Room found to deleted " };
 
             }
         }
 
 
-    
+
         public  async Task<ServiceResult>  UpdateRoom(Guid id,RoomDTO newRoom)
         {
-            var room = await UnitOfWork.Rooms.Find(r=>r.ID==id && r.IsDeleted== false,["Images"]);
+            var room = await UnitOfWork.Rooms.Find(r => r.ID == id && r.IsDeleted == false, r => r.Images);//var room = await UnitOfWork.Rooms.Find(r=>r.ID==id && r.IsDeleted== false,["Images"]);
             if (room != null)
             {
                 room.Price = newRoom.Price;
                 room.Taken = newRoom.Taken;
                 room.Type = newRoom.Type;
                 room.Number = newRoom.RoomNum;
-            
 
-                UnitOfWork.Rooms.Update(room);
-                UnitOfWork.Complete();
-                return new ServiceResult { Success = true };
-            }
-            else
-            {
-                return new ServiceResult { Success = false, ErrorMessage = "No Room found to Edit " };
 
-            }
-        }
+        UnitOfWork.Rooms.Update(room);
+        UnitOfWork.Complete();
+        return new ServiceResult { Success = true };
+    }
+    else
+    {
+        return new ServiceResult { Success = false, ErrorMessage = "No Room found to Edit " };
+
+    }
+}
     }
 }

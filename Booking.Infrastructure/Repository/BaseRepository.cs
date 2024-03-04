@@ -117,5 +117,6 @@ namespace Booking.Infrastructure.Repository
         {
             return await _context.Set<T>().CountAsync(criteria);
         }
+
     }
 }

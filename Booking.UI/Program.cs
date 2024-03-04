@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -31,12 +32,21 @@ builder.Host.ConfigureLogging(logging =>
     logging.AddDebug();
 });
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IOrderForAdminService, OrderForAdminService>();
+builder.Services.AddScoped<IOrderForUserService, OrderForUserService>();
+builder.Services.AddScoped<IOrderForCart, OrderForCart>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
+
 
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<UploadImageService>();
+
 
 
 builder.Services.AddSingleton<IStartupFilter>(new StartupFilterHelperService(InitializeHelperService));
@@ -47,7 +57,6 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddScoped<ICustomerService,CustomerService>();
 
 
 var app = builder.Build();
@@ -67,7 +76,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

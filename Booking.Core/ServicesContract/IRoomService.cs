@@ -10,8 +10,8 @@ namespace Booking.Core.ServicesContract
 {
     public interface IRoomService
     {
-        public  Task<IEnumerable<RoomDTO>> GetAllRooms();
-        public  Task<RoomDTO> GetRoomById(Guid id);
+        public Task<IEnumerable<RoomDTO>> GetAllRooms();
+        public Task<RoomDTO> GetRoomById(Guid id);
 
         public Task<ServiceResult> AddRoom(RoomDTO roomDTO);
         public Task<ServiceResult> DeleteRoom(Guid id);
