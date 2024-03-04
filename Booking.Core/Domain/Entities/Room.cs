@@ -29,7 +29,7 @@ namespace Core.Domain.Entities
         [Required]
         public RoomType Type { get; set; }
 
-      //  public ICollection<string>? Images { get; set; }
+        //  public ICollection<string>? Images { get; set; }
         public virtual ICollection<RoomImages>? Images { get; set; }
 
         [Required]

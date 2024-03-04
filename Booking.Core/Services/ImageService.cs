@@ -14,7 +14,7 @@ namespace Booking.Core.Services
         public void DeleteFileAsync(string imageNameInDatabaseTable, string WebRootPath)
         {
             string ExitingFile = Path.Combine(WebRootPath, "images", "Hotel", imageNameInDatabaseTable);
-            System.IO.File.Delete(ExitingFile);
+            File.Delete(ExitingFile);
         }
 
         public async Task<string> UploadFileAsync(IFormFile ImageFile,string WebRootPath)

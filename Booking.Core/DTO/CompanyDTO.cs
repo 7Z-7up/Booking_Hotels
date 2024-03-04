@@ -20,6 +20,7 @@ namespace Booking.Core.DTO
         public string Name { get; set; }
         [DisplayName("Upload Image")]
         public IFormFile? ImageFile { get; set; }
+        public string ImageUrl { get; set; }
         public decimal? TotalProfits { get; set; }
         [DataType(DataType.Password)]
         [PasswordPropertyText]

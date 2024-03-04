@@ -1,0 +1,10 @@
+﻿@using Booking.Core.DTO;
+@model CompanyDTO
+
+<img class="card-img-top" src="~/images/Model/@Model.ImageUrl" alt="Card image cap">
+<div class="card-body">
+    <h5 class="card-title">@Html.DisplayFor(model => Model.Name)</h5>
+    @Html.DisplayNameFor(model => Model.TotalProfits)
+    @Html.DisplayFor(model => Model.TotalProfits)
+    <hr />
+</div>

@@ -19,8 +19,8 @@ namespace Booking.UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var company = await _companyService.GetAll();
-            return View(company);
+            var companyDTO = await _companyService.GetAll();
+            return View(companyDTO);
         }
 
 

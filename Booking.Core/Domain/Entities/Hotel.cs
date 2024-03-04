@@ -26,7 +26,7 @@ namespace Core.Domain.Entities
         [MaxLength(100)]
         public string Address { get; set; }
 
-        public List<string>? Images { get; set; }
+        //public List<string>? Images { get; set; }
 
         //public bool AdditionalServices { get; set; }
 
