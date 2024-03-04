@@ -4,76 +4,95 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<style>
+    .create-container {
+        background-color: #f8f9fa; /* Light gray background */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+    }
 
-<h4>CreateOrderDTO</h4>
-<hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form method="post">
-               @for (int i = 0; i < Model.RoomId.Count; i++)
-               {
-                Model.NumberofDays.Add(1);
-               }
-            @for (int i = 0; i < Model.RoomId.Count; i++)
-            {
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <input asp-for="@Model.RoomId[i]" type="hidden" />
-                </div>
-                @if (Model.CustomerId.Count>i)
-                {
-                    <div class="form-group">
-                        <input asp-for="@Model.CustomerId[i]" type="hidden" />
-                    </div>
-                }
-                    <div class="form-group">
-                        <label asp-for="@Model.NumberofDays" class="control-label"></label>
-                    <input asp-for="@Model.NumberofDays[i]" class="form-control" min="1" />
-                    <span asp-validation-for="@Model.NumberofDays[i]" class="text-danger"></span>
-                    </div>
 
-                @if (Model.OrderID.Count>i){
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="create-container">
+                <h1 class="text-center">Create</h1>
+                <h4>CreateOrderDTO</h4>
+                <hr />
+                @for (int i = 0; i < Model.RoomId.Count; i++)
+                {
+                    Model.NumberofDays.Add(1);
+                }
+                <form method="post">
+                    @for (int i = 0; i < Model.RoomId.Count; i++)
+                    {
+                        <div class="form-group">
+                            <input asp-for="@Model.RoomId[i]" type="hidden" />
+                            @if (Model.CustomerId.Count > i)
+                            {
+                                <input asp-for="@Model.CustomerId[i]" type="hidden" />
+                            }
+
+                            <label asp-for="@Model.NumberofDays" class="control-label">Number of Days</label>
+                            <input asp-for="@Model.NumberofDays[i]" class="form-control" min="1" />
+                            <span asp-validation-for="@Model.NumberofDays[i]" class="text-danger"></span>
+
+                            @if (Model.OrderID.Count > i)
+                            {
+                                <input asp-for="@Model.OrderID[i]" type="hidden" />
+                            }
+
+                            @if (Model.Number.Count > i)
+                            {
+                                <label asp-for="@Model.Number" class="control-label">Number</label>
+                                <input asp-for="@Model.Number[i]" class="form-control" readonly />
+                                <span asp-validation-for="@Model.Number[i]" class="text-danger"></span>
+                            }
+
+                            @if (Model.Price.Count > i)
+                            {
+                                <label asp-for="@Model.Price" class="control-label">Price</label>
+                                <input asp-for="@Model.Price[i]" class="form-control" readonly />
+                                <span asp-validation-for="@Model.Price[i]" class="text-danger"></span>
+                            }
+
+                            @if (Model.Type.Count > i)
+                            {
+                                <label asp-for="@Model.Type" class="control-label">Type</label>
+                                <input asp-for="@Model.Type[i]" class="form-control" readonly />
+                                <span asp-validation-for="@Model.Type[i]" class="text-danger"></span>
+                            }
+
+                            <a asp-action="Remove" asp-route-id="@Model.RoomId[i]" class="btn btn-danger">Delete</a>
+                        </div>
+                    }
+
                     <div class="form-group">
-                        <input asp-for="@Model.OrderID[i]" type="hidden" />
+                        <input type="submit" value="Save All" class="btn btn-primary" />
                     </div>
-                }
-                @if (Model.Number.Count>i)
-                {
-                    <div class="form-group">
-                        <label asp-for="@Model.Number" class="control-label"></label>
-                    <input asp-for="@Model.Number[i]" class="form-control" readonly />
-                    <span asp-validation-for="@Model.Number[i]" class="text-danger"></span>
-                </div>
-                }
-                @if (Model.Price.Count>i)
-                {
-                    <div class="form-group">
-                        <label asp-for="@Model.Price" class="control-label"></label>
-                    <input asp-for="@Model.Price[i]" class="form-control" readonly value="12" />
-                    <span asp-validation-for="@Model.Price[i]" class="text-danger"></span>
-                </div>
-                }
-                @if (Model.Type.Count>i)
-                {
-                    <div class="form-group">
-                        <label asp-for="@Model.Type" class="control-label"></label>
-                    <input asp-for="@Model.Type[i]" class="form-control" readonly />
-                    <span asp-validation-for="@Model.Type[i]" class="text-danger"></span>
-                </div>
-                }
-                @Html.ActionLink("Delete", "remove", new { id = @Model.RoomId[i] })
-            }
-            <div class="form-group">
-                <input type="submit" value="Save All" class="btn btn-primary" />
+                </form>
             </div>
-            </form>
         </div>
     </div>
-        <div>
-    <a asp-action="Index">Back to List</a>
+</div>
+
+<div class="text-center">
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
 }
